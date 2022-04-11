@@ -20,6 +20,7 @@ def breed_cost_floor():
 
     slp_trades = float(client.get_recent_trades(symbol='SLPUSDT')[0]['price'])
     axs_trades = float(client.get_recent_trades(symbol='AXSUSDT')[0]['price'])
+
     slp_costs = [900,1350,2250,3600,5850,9450,15300]
     cumulative = []
     price = []
@@ -30,7 +31,7 @@ def breed_cost_floor():
         total = ((slp_costs[x] * slp_trades) * 2) + (axs_trades / 2 )
         price.append(total)
         cumulative.append(sum(price))
-        avg.append( cumulative[-1]/(x+1) )
+        avg.append( round(cumulative[-1]/(x+1),1) )
         
     return avg
 

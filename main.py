@@ -1,4 +1,5 @@
-from gather_data import gather_data
+import time
+from gather_data import collect_sold_raw, gather_data
 
 
 
@@ -6,11 +7,13 @@ if __name__ == "__main__":
     ##creating transfer history
 
 
-    for i in range(0,100):
-        while True:
-            try:
-                # do stuff
-                gather_data()
-            except:
-                continue
-            break
+
+    while True:
+        try:
+            # do stuff
+            print('gathering')
+            gather_data()
+            time.sleep(0.5)
+        except Exception as e: 
+            print(e)
+            continue

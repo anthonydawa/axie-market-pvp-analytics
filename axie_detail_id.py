@@ -25,5 +25,23 @@ def axie_detail_id(id):
 ## get id and price
 
 if __name__ == "__main__":
-    x = axie_detail_id(11020530)
+    x = axie_detail_id(8398222)
+    
+
+
+    print(x['data']['axie']['stats']['speed'])
+    print(x['data']['axie']['parts'][0]['id'])
+    print(x['data']['axie']['parts'][1]['id'])
+    print(x['data']['axie']['parts'][2]['id'])
+    print(x['data']['axie']['parts'][3]['id'])
+    print(x['data']['axie']['parts'][4]['id'])
+    print(x['data']['axie']['parts'][5]['id'])
+    print(x['data']['axie']['breedCount'])
     print(x['data']['axie']['class'])
+
+
+
+
+    # breedCount
+    # stats
+    # parts

@@ -1,3 +1,5 @@
+import csv
+
 def trend_tally_parts():
 
     with open('db/parts_tally', 'r') as f:
@@ -8,7 +10,8 @@ def trend_tally_parts():
             l.append([parsed[0],parsed[1].replace('\n','')])
         d = {x[0]:int(x[1]) for x in l}
 
-    with open('db/axie_details', 'r') as f:
+
+    with open('db/axie_details_clean', 'r') as f:
         data = f.readlines()
         for line in data:
             c = line.replace('\n','')
@@ -27,5 +30,24 @@ def trend_tally_parts():
             my_str += f"{values},{ordered_parts[values]}\n"
         f.write(my_str)
 
+
+def revertZero():
+    with open('db/parts_tally', newline='') as f:
+        reader = csv.reader(f)
+        data = list(reader)
+    
+    nl = []
+    for x in data:
+        x.pop()
+        x.append("0")
+        nl.append(x)
+
+    with open("db/parts_tally", "w", newline="\n") as f:
+        writer = csv.writer(f)
+        writer.writerows(nl)
+        
+        
 if __name__ == "__main__":
+    revertZero()
     trend_tally_parts()
+    print('tallied!')

@@ -1,10 +1,12 @@
+
+
+import time
 from axie_detail_id import axie_detail_id
 from agp_py import AxieGene
 from helper_functions import breed_cost_floor, get_purity
 from recent_sold import recent_sold
 
 def gather_data():
-
 
     recent_sold_axies = recent_sold()['data']['settledAuctions']['axies']['results']
 
@@ -14,7 +16,6 @@ def gather_data():
 
             "id":"",
             "priceUsd":"",
-            "priceEth":"",
             "eyes":"",
             "ears":"",
             "mouth":"",
@@ -24,7 +25,6 @@ def gather_data():
             "class":"",
             "breedCount":"",
             "purity":"",
-            "priceHistory":"",
             "transactionTime":""
 
         }
@@ -47,13 +47,35 @@ def gather_data():
         axie_details['transactionTime'] = axie['transferHistory']['results'][0]['timestamp']
         axie_details['priceUsd'] = axie['transferHistory']['results'][0]['withPriceUsd']
 
-        floorDiff = [ str(float(price_usd) - x) for x in breed_cost_floor()]
+        
+        floorDiff = [ str(int( round( float(price_usd) - x , 1) )) for x in breed_cost_floor()]
         strfloor = ",".join(floorDiff)
 
 
 
         with open('db/axie_details', 'a') as f:
-            f.write(f"{axie_details['id']},{axie_details['breedCount']},{axie_details['purity']},{axie_details['class']},{axie_details['eyes']},{axie_details['ears']},{axie_details['mouth']},{axie_details['horn']},{axie_details['back']},{axie_details['tail']},{axie_details['transactionTime']},{axie_details['priceUsd']}\n")
+            f.write(f"{axie_details['id']},{axie_details['breedCount']},{int(axie_details['purity'])},{axie_details['class']},{axie_details['eyes']},{axie_details['ears']},{axie_details['mouth']},{axie_details['horn']},{axie_details['back']},{axie_details['tail']},{axie_details['transactionTime']}\n")
 
         with open('db/axie_tx', 'a') as f:
-            f.write(f"{axie_details['id']},{strfloor}\n")
+            f.write(f"{axie_details['id']},{strfloor},{axie_details['transactionTime']},{ int(round(float(axie_details['priceUsd']),1))}\n")
+
+
+def collect_sold_raw():
+
+    recent_sold_axies = recent_sold()['data']['settledAuctions']['axies']['results']
+
+    
+    with open('recent_sold_raw.csv','a') as f:
+        
+        for axie in recent_sold_axies:
+            csvformat = f'{axie["id"]},{axie["class"]},{axie["breedCount"]},{axie["transferHistory"]["results"][0]["timestamp"]},{axie["transferHistory"]["results"][0]["withPriceUsd"]}\n'
+            f.writelines(csvformat)
+
+    # to get id only
+    # str(axie_details['id']) in [previous_data['id'] for previous_data in previous_data if 'id' in previous_data]
+    
+
+
+
+if __name__ == "__main__":
+    collect_sold_raw()

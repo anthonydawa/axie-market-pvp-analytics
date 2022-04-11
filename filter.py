@@ -2,11 +2,7 @@ from time import time
 import requests
 from agp_py import AxieGene
 
-
-
-
-
-
+from group_card_parts import getClassEyeEars, getClassParts
 
 def constructQuery():
     query = "query GetAxieBriefList($criteria: AxieSearchCriteria) { "
@@ -28,7 +24,6 @@ def percent_purity(purity,ignoreEyesEars):
         return ((purity['eyes'] + purity['ears']+ purity['mouth'] + purity['horn'] + purity['back'] + purity['tail']) / 6 ) * 2
         
 
-
 def get_part_purity(genes,ignore_eyes_ears,build):
 
     purity = {
@@ -39,6 +34,8 @@ def get_part_purity(genes,ignore_eyes_ears,build):
         "back": 0,
         "tail": 0,
     }
+    
+
 
     if ignore_eyes_ears:
 
@@ -120,64 +117,8 @@ def fix_args(arg):
     else: 
         return arg
 
-def marketplace_query(parts=[],classes=[],breedCount=[0,1,2,3,4,5,6,7],pureness=[1,2,3,4,5,6],ignoreEyesEars=False,morale=[27,61],hp=[27,61],skill=[27,61],speed=[27,61]):
+def marketplace_query(parts=[],classes=["Aquatic","Reptile","Beast","Mech","Dusk","Dawn","Plant","Bug","Bird"],breedCount=[0,1,2,3,4,5,6,7],pureness=[1,2,3,4,5,6],ignoreEyesEars=False,morale=[27,61],hp=[27,61],skill=[27,61],speed=[27,61]):
     
-    if parts == []:
-        parts = []
-
-    if classes == []:
-        classes = ["Aquatic","Reptile","Beast","Mech","Dusk","Dawn","Plant","Bug","Bird"]
-
-    if breedCount == []:
-        breedCount=[0,1,2,3,4,5,6,7]
-
-    elif breedCount != []:
-        format_bc = []
-        bc = breedCount[0]
-        for x in range(bc):
-            format_bc.append(x)
-        format_bc.append(format_bc[-1] + 1)
-        breedCount = format_bc
-
-
-
-    if pureness == []:
-        pureness=[1,2,3,4,5,6]
-    elif pureness != []:
-        format_pr = []
-        pr = pureness[0]
-        for x in range(pr):
-            format_pr.append(x)
-        format_pr.append(format_pr[-1] + 1)
-        pureness = format_pr
-
-
-    if ignoreEyesEars == []:
-        ignoreEyesEars=False
-
-    if morale == []:
-        morale=[27,61]
-
-    if hp == []:
-        hp=[27,61]
-
-    if skill == []:
-        skill=[27,61]
-
-    if speed == []:
-        speed=[27,61]
-
-    
-    parts = fix_args(parts)
-    classes = fix_args(classes)
-    breedCount = fix_args(breedCount)
-    pureness = fix_args(pureness)
-    ignoreEyesEars = fix_args(ignoreEyesEars)
-    morale = fix_args(morale)
-    hp = fix_args(hp)
-    skill = fix_args(skill)
-    speed = fix_args(speed)
-
     endpoint = "https://axieinfinity.com/graphql-server-v2/graphql"
 
 
@@ -201,7 +142,7 @@ def marketplace_query(parts=[],classes=[],breedCount=[0,1,2,3,4,5,6,7],pureness=
             f = f'ax{i}'
 
             for axie in fetched_data['data'][f]['results']:
-
+                
                 axie_genes = axie['genes']
                 hex_string = axie_genes
 
@@ -213,7 +154,7 @@ def marketplace_query(parts=[],classes=[],breedCount=[0,1,2,3,4,5,6,7],pureness=
                     
                     axie_stats = {
                         "purity" : get_part_purity(gene,ignoreEyesEars,parts),
-                        "percent_purity" : percent_purity(get_part_purity(gene,True,parts),True),
+                        "percent_purity" : percent_purity(get_part_purity(gene,ignoreEyesEars,parts),True),
                         "id" : axie['id'] ,
                         "price" : str_price,
                         "gene" : gene.genes
@@ -225,10 +166,15 @@ def marketplace_query(parts=[],classes=[],breedCount=[0,1,2,3,4,5,6,7],pureness=
                 except Exception as e:
                     print("error parsing", axie['id'], e)
         
+       
         return filtered_axie
 
 
+if __name__ == "__main__": 
+    x = getClassEyeEars(getClassParts('aquatic'))
 
+    axs = {'parts': x, 'classes': ['Plant'], 'speed': [31, 61], 'breedCount': [2]}
+    x = marketplace_query(parts=axs['parts'], classes=axs['classes'],breedCount=axs['breedCount'])
+ 
 
-
-
+    print(x[0])
