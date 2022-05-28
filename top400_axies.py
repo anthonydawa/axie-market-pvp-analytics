@@ -1,4 +1,6 @@
 import csv
+import random
+import time
 
 from axie_detail_id import axie_detail_id
 from helper_functions import get_purity
@@ -8,12 +10,12 @@ from agp_py import AxieGene
 
 def get_top400_axies():
 
-    with open('leaderboards_axies.csv') as f:
+    with open('db/leaderboards_axies.csv') as f:
         reader = csv.reader(f)
         data = list(reader)
 
         with open('db/top400_axie_details.csv', 'w') as f:
-            f.write('id,eyes,ears,mouth,horn,back,tail,class,breedcount,speed\n')
+            f.write('address,id,eyes,ears,mouth,horn,back,tail,class,breedcount,speed\n')
 
         for axie in data:
 
@@ -36,6 +38,7 @@ def get_top400_axies():
                     }
 
                     axie_info = axie_detail_id(ax)['data']['axie']
+                    time.sleep(random.randint(4,5))
                     hex_gene = axie_info['genes']
                     gene = AxieGene(hex_gene,256)
 

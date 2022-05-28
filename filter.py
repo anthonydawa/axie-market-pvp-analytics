@@ -1,4 +1,5 @@
 from time import time
+from turtle import speed
 import requests
 from agp_py import AxieGene
 
@@ -119,8 +120,8 @@ def fix_args(arg):
 
 def marketplace_query(parts=[],classes=["Aquatic","Reptile","Beast","Mech","Dusk","Dawn","Plant","Bug","Bird"],breedCount=[0,1,2,3,4,5,6,7],pureness=[1,2,3,4,5,6],ignoreEyesEars=False,morale=[27,61],hp=[27,61],skill=[27,61],speed=[27,61]):
     
-    endpoint = "https://axieinfinity.com/graphql-server-v2/graphql"
-
+    endpoint = "https://graphql-gateway.axieinfinity.com/graphql"
+ 
 
     body = {
         "operationName": "GetAxieBriefList",
@@ -130,6 +131,9 @@ def marketplace_query(parts=[],classes=["Aquatic","Reptile","Beast","Mech","Dusk
     
     request = requests.Session()
     response = request.post(endpoint,headers={'Content-Type': 'application/json'}, json = body)
+    print('rate limit',response.headers['RateLimit-Remaining'])
+    print(response.headers)
+
     
     if 200 <= response.status_code <= 299:
 
@@ -157,7 +161,8 @@ def marketplace_query(parts=[],classes=["Aquatic","Reptile","Beast","Mech","Dusk
                         "percent_purity" : percent_purity(get_part_purity(gene,ignoreEyesEars,parts),True),
                         "id" : axie['id'] ,
                         "price" : str_price,
-                        "gene" : gene.genes
+                        "gene" : gene.genes,
+                   
                     }       
 
                     filtered_axie.append(axie_stats)   
@@ -171,10 +176,9 @@ def marketplace_query(parts=[],classes=["Aquatic","Reptile","Beast","Mech","Dusk
 
 
 if __name__ == "__main__": 
-    x = getClassEyeEars(getClassParts('aquatic'))
-
-    axs = {'parts': x, 'classes': ['Plant'], 'speed': [31, 61], 'breedCount': [2]}
-    x = marketplace_query(parts=axs['parts'], classes=axs['classes'],breedCount=axs['breedCount'])
- 
-
+    
+    x = getClassEyeEars(getClassParts(['aquatic']))
+    axs = {'parts': x, 'classes': ['Plant'], 'speed': [31,56], 'breedCount': [2]}
+    x = marketplace_query(parts=axs['parts'], classes=axs['classes'],breedCount=[0],speed=axs['speed'])
     print(x[0])
+    # print([axd['price'] for axd in x if axd['id'] == '8470085']

@@ -16,8 +16,7 @@ def axie_detail_id(id):
 
     request = requests.Session()
     response = request.post(endpoint,headers={'Content-Type': 'application/json'}, json = body)
-
-
+    print('rate limit',response.headers['RateLimit-Remaining'])
     fetched_data = response.json()
 
     return fetched_data
@@ -25,23 +24,34 @@ def axie_detail_id(id):
 ## get id and price
 
 if __name__ == "__main__":
-    x = axie_detail_id(8398222)
-    
+    x = axie_detail_id(11295336)
+    print(x['data']['axie'].keys())
+    print(x['data']['axie']['birthDate'])
 
 
+
+    # print(x['data']['axie']['stats']['speed'])
+    # print(x['data']['axie']['parts'][0]['id'])
+    # print(x['data']['axie']['parts'][1]['id'])
+    # print(x['data']['axie']['parts'][2]['id'])
+    # print(x['data']['axie']['parts'][3]['id'])
+    # print(x['data']['axie']['parts'][4]['id'])
+    # print(x['data']['axie']['parts'][5]['id'])
+    # print(x['data']['axie']['breedCount'])
+    # print(x['data']['axie']['class'])
+
+    # print(x['data']['axie']['parts'][2:])
+    # print(len(x['data']['axie']['parts'][2:]))
     print(x['data']['axie']['stats']['speed'])
-    print(x['data']['axie']['parts'][0]['id'])
-    print(x['data']['axie']['parts'][1]['id'])
-    print(x['data']['axie']['parts'][2]['id'])
-    print(x['data']['axie']['parts'][3]['id'])
-    print(x['data']['axie']['parts'][4]['id'])
-    print(x['data']['axie']['parts'][5]['id'])
-    print(x['data']['axie']['breedCount'])
-    print(x['data']['axie']['class'])
 
 
+    # xx = [ x['id'] for x in x['data']['axie']['parts'][2:]]
+    
+    # print(xx)
 
 
     # breedCount
     # stats
     # parts
+
+ 

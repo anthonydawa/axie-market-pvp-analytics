@@ -42,5 +42,5 @@ def getClassEyeEars(arr):
 
 
 if __name__ == "__main__": 
-    print(getClassEyeEars(getClassParts(['aquatic','beast'])))
+    print(getClassEyeEars(getClassParts(['aquatic'])))
     

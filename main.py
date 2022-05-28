@@ -13,7 +13,7 @@ if __name__ == "__main__":
             # do stuff
             print('gathering')
             gather_data()
-            time.sleep(0.5)
+            
         except Exception as e: 
             print(e)
             continue

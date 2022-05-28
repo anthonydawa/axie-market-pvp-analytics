@@ -1,14 +1,21 @@
 
 
+import random
 import time
 from axie_detail_id import axie_detail_id
 from agp_py import AxieGene
 from helper_functions import breed_cost_floor, get_purity
 from recent_sold import recent_sold
+from datetime import date
+
+today = date.today()
+
 
 def gather_data():
 
     recent_sold_axies = recent_sold()['data']['settledAuctions']['axies']['results']
+    x = random.randint(5,10)
+    time.sleep(x)
 
     for axie in recent_sold_axies:
 
@@ -50,15 +57,20 @@ def gather_data():
         
         floorDiff = [ str(int( round( float(price_usd) - x , 1) )) for x in breed_cost_floor()]
         strfloor = ",".join(floorDiff)
+     
+        d4 = today.strftime("%b-%d-%Y")
+        db_path = 'db/sold_axies_data/'
+        details_path = db_path + 'axie_details/' + d4 + '.csv'
+        tx_path = db_path + 'axie_tx/' + d4 + '.csv'
 
-
-
-        with open('db/axie_details', 'a') as f:
+        with open(details_path, 'a') as f:
             f.write(f"{axie_details['id']},{axie_details['breedCount']},{int(axie_details['purity'])},{axie_details['class']},{axie_details['eyes']},{axie_details['ears']},{axie_details['mouth']},{axie_details['horn']},{axie_details['back']},{axie_details['tail']},{axie_details['transactionTime']}\n")
 
-        with open('db/axie_tx', 'a') as f:
+        with open(tx_path, 'a') as f:
             f.write(f"{axie_details['id']},{strfloor},{axie_details['transactionTime']},{ int(round(float(axie_details['priceUsd']),1))}\n")
 
+        x = random.randint(5,10)
+        time.sleep(x)
 
 def collect_sold_raw():
 
@@ -78,4 +90,4 @@ def collect_sold_raw():
 
 
 if __name__ == "__main__":
-    collect_sold_raw()
+    gather_data()

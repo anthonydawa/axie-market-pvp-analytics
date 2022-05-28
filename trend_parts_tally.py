@@ -1,4 +1,18 @@
 import csv
+import os
+
+
+class Data():
+    def __init__(self,csv_path):
+        pass
+
+    def handle_csv():
+        path = '/home/data_analysis/netflix'
+        files = os.listdir(path)
+        for f in files:
+            print(f)
+
+
 
 def trend_tally_parts():
 
@@ -48,6 +62,7 @@ def revertZero():
         
         
 if __name__ == "__main__":
-    revertZero()
-    trend_tally_parts()
-    print('tallied!')
+    pass
+    # revertZero()
+    # trend_tally_parts()
+    # print('tallied!')

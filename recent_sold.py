@@ -17,6 +17,7 @@ def recent_sold():
 
     request = requests.Session()
     response = request.post(endpoint,headers={'Content-Type': 'application/json'}, json = GetRecentlyAxiesSold)
+    print('rate limit',response.headers['RateLimit-Remaining'])
 
 
     fetched_data = response.json()
